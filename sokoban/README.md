@@ -1,5 +1,4 @@
-###### Copyright Sabin Padurariu 2025
-
+Copyright (c) 2025 Sabin Padurariu
 
 # Solving Sokoban using State Search Algorithms
 

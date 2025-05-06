@@ -1,5 +1,4 @@
-###### Copyright Sabin Padurariu 2023
-
+Copyright (c) 2023 Sabin Padurariu
 
 # **MNIST**
 
