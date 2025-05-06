@@ -67,13 +67,13 @@ Calculating the Manhattan distance is computationally inexpensive. For each
 box, we need to compute the Manhattan distance to each target and find the
 minimum
 
-![naive_state](images/naive_state.png)
+![naive_heur_states](docs/images/naive_heur_states.png)
 
-![naive_time](images/naive_time.png)
+![naive_heur_time](docs/images/naive_heur_time.png)
 
-**Drawbacks**
+#### Drawbacks
 
-1. A significant limitation of the Manhattan distance heuristic is that it
+A significant limitation of the Manhattan distance heuristic is that it
 completely disregards the presence of walls and other boxes within the
 warehouse. The straight-line Manhattan distance between a box and a target
 might be physically impossible to achieve due to obstructions. The player
@@ -81,7 +81,7 @@ might need to make numerous additional moves to maneuver around these obstacles,
 making the actual number of moves significantly higher than the heuristic
 estimate.
 
-2. The heuristic treats each box independently and calculates its distance to
+The heuristic treats each box independently and calculates its distance to
 the nearest target. However, solving Sokoban often requires a sequence of moves
 where the positioning of one box can affect the ability to move other boxes.
 The heuristic fails to capture these crucial interdependencies
@@ -106,22 +106,22 @@ and each target must be occupied by exactly one box, the Nearest Neighbors
 heuristic can be admissible. The reasoning is that for each box, we are
 considering the minimum cost to reach some unoccupied target.
 
-![simple_state](images/simple_state.png)
+![simple_heur_states](docs/images/simple_heur_states.png)
 
-![simple_time](images/simple_time.png)
+![simple_heur_time](docs/images/simple_heur_time.png)
 
-**Drawbacks**
+#### Drawbacks
 
-1. Still Ignores Obstacles and Walls. Similar to the basic Manhattan distance,
+Still Ignores Obstacles and Walls. Similar to the basic Manhattan distance,
 the Nearest Neighbors heuristic operates solely on grid coordinates and does
 not take into account the presence of walls or other boxes that might obstruct
 the path.
 
-2. Greedy Assignment Can Lead to Suboptimal Estimates. The greedy nature of
+Greedy Assignment Can Lead to Suboptimal Estimates. The greedy nature of
 assigning each box to its nearest available target might not always reflect
 the optimal overall assignment.
 
-3. Complexity of Implementation. Implementing the Nearest Neighbors heuristic
+Complexity of Implementation. Implementing the Nearest Neighbors heuristic
 requires a mechanism to keep track of assigned targets and efficiently find the
 nearest unassigned target for each box.
 
@@ -143,20 +143,20 @@ If the BFS is performed to find the shortest push sequence for a single box to a
 target, considering only walls, and the heuristic sums the minimum such costs
 for each box to its closest target, it could potentially be admissible. 
 
-![nearest_state](images/nearest_state.png)
+![nearest_heur_states](docs/images/nearest_heur_states.png)
 
-![nearest_time](images/nearest_time.png)
+![nearest_heur_time](docs/images/nearest_heur_time.png)
 
-**Drawbacks**
+#### Drawbacks
 
-1. Computational Cost
+Computational Cost is very high.
 
-2. Ignores Box-Box Interactions. Similar to the Manhattan distance, a BFS
+Ignores Box-Box Interactions. Similar to the Manhattan distance, a BFS
 focused on individual boxes and walls does not account for the interactions
 between boxes. One box might block the path of another, making the individually
 calculated shortest paths infeasible in the actual game.
 
-3. Admissibility Challenges. Ensuring admissibility when using BFS in this way
+Admissibility Challenges. Ensuring admissibility when using BFS in this way
 requires careful consideration. Simply summing the shortest paths for individual
 boxes might overestimate the true cost if the optimal solution requires
 coordinated movements that make these individual paths longer.
@@ -174,6 +174,6 @@ BFS-based Heuristic tries to incorporate the warehouse layout (walls) into the
 estimate, which can be more accurate for individual box movements but can be
 computationally expensive and still struggles with inter-box dependencies.
 
-![comp_state](images/comp_state.png)
+![comp_heur_states](docs/images/all_heur_states.png)
 
-![comp_time](images/comp_time.png)
+![comp_heur_time](docs/images/all_heur_time.png)
