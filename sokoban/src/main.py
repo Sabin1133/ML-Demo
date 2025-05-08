@@ -1,6 +1,6 @@
 from sys import argv
 
-from representation import Map
+from sokoban import Map
 
 from search_methods.heuristics import (
     naive_manhattan_dist_heuristic,
@@ -15,7 +15,7 @@ from search_methods.solver import Solver
 
 
 def main():
-    if len(argv) < 3 or len(argv) > 4:
+    if len(argv) < 3 or len(argv) > 5:
         print("Incorrect number of parameters")
         return
     
@@ -32,18 +32,16 @@ def main():
         case _:
             print("Unknown algorithm")
             return
-        
-    if len(argv) == 3:
-        solver.solve()
-    elif argv[3] == "pause":
-        solver.solve(-1)
-    else:
-        try:
-            solver.solve(float(argv[3]))
-        except ValueError:
-            solver.solve()
 
-    solver.print_path()
+    try:
+        solver.solve(float(argv[4]))
+    except Exception:
+        solver.solve()
+
+    try:
+        solver.print_path(float(argv[3]))
+    except Exception:
+        solver.print_path()
 
 
 if __name__ == '__main__':

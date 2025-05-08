@@ -1,5 +1,4 @@
 # class Explorer:
-# class PathFinder:
 class GraphSearch:
     def set_initial_state(self, state):
         raise NotImplementedError

@@ -8,7 +8,7 @@ __all__ = [
     'BOX_UP',
     'BOX_DOWN', 
     'moves_meaning',
-    'is_pull'
+    'is_move_pull'
 ]
 
 
@@ -36,5 +36,5 @@ moves_meaning = {
 }
 
 
-def is_pull(action):
-    return action > DOWN
+def is_move_pull(move):
+    return move in {BOX_LEFT, BOX_RIGHT, BOX_UP, BOX_DOWN}

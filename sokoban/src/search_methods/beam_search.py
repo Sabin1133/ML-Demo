@@ -1,6 +1,7 @@
 from copy import deepcopy
-import random
-from heapq import heappush, heappushpop
+from heapq import heappush
+
+from sokoban.moves import is_move_pull
 
 from .graph_search import GraphSearch
 
@@ -8,6 +9,10 @@ from .graph_search import GraphSearch
 class LocalBeamSearch(GraphSearch):
     def __init__(self, initial_state, heuristic_function, k):
         self._nr_iters = 0
+
+        # TODO remove
+        self._nr_pull_iters = 0
+
         self._nr_states = 1
         self._path = []
 
@@ -39,9 +44,16 @@ class LocalBeamSearch(GraphSearch):
         best_next_h_and_states = []
 
         for state in self._best_states:
-            for neigh_s in state.get_neighbours():
+            # for neigh_s in state.get_neighbours():
+            # TODO remove
+            for action, neigh_s in zip(state.filter_possible_moves(), state.get_neighbours()):
                 if str(neigh_s) in self._explored_states:
                     continue
+
+                # TODO remove
+                if is_move_pull(action):
+                    self._nr_pull_iters += 1
+
 
                 self._explored_states.add(str(neigh_s))
 
@@ -65,7 +77,9 @@ class LocalBeamSearch(GraphSearch):
         return len(self._best_states)
     
     def get_results(self):
-        return (self._nr_iters, self._nr_states, [])
+        # return (self._nr_iters, self._nr_states, [])
+        # TODO remove
+        return (self._nr_iters, self._nr_states, [], self._nr_pull_iters)
     
     def has_finished(self):
         return self._found_final_state

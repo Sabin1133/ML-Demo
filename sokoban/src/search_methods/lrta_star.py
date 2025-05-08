@@ -2,7 +2,7 @@ import time
 import random
 from copy import deepcopy
 
-from sokoban.moves import moves_meaning, is_pull
+from sokoban.moves import moves_meaning, is_move_pull
 
 from .graph_search import GraphSearch
 
@@ -10,6 +10,10 @@ from .graph_search import GraphSearch
 class LRTAStarSearch(GraphSearch):
     def __init__(self, initial_state, heuristic_function):
         self._nr_iters = 0
+
+        # TODO remove
+        self._nr_pull_iters = 0
+
         self._nr_states = 1
         self._path = []
 
@@ -43,7 +47,7 @@ class LRTAStarSearch(GraphSearch):
         random.seed(1)
         return random.choice([action for action, neigh_s in zip(actions, neigh_states) if self._cost(action, neigh_s) == min_eval])
 
-    def next_iter(self, frame_interval=0):
+    def next_iter(self, frame_interval=0.0):
         if self._curr_s.is_solved():
             return 0
 
@@ -56,6 +60,10 @@ class LRTAStarSearch(GraphSearch):
             self._real_h[str(self._prev_s)] = self._best_next_cost(self._prev_s)
 
         self._curr_a = self._next_action(self._curr_s)
+
+        # TODO remove
+        if is_move_pull(self._curr_a):
+            self._nr_pull_iters += 1
 
         self._check_debug(frame_interval)
 
@@ -83,7 +91,9 @@ class LRTAStarSearch(GraphSearch):
         return 1
     
     def get_results(self):
-        return (self._nr_iters, self._nr_states, self._path)
+        # return (self._nr_iters, self._nr_states, self._path)
+        # TODO remove
+        return (self._nr_iters, self._nr_states, self._path, self._nr_pull_iters)
     
     def has_finished(self):
         return self._curr_s.is_solved()
@@ -103,17 +113,14 @@ class LRTAStarSearch(GraphSearch):
     def _print_debug(self):
         print(self._curr_s)
         print("\033[2K", "action - ", moves_meaning[self._curr_a] if not self._curr_s.is_solved() else "", sep='')
-
         print()
-
         print("\033[2K", "nr iter - ", self._nr_iters, sep='')
         print("\033[2K", "nr states - ", self._nr_states, sep='')
-
         print("\033[2K", "h current - ", self._real_h[str(self._curr_s)] if str(self._curr_s) in self._real_h else self._h(self._curr_s), sep='')
         
-        if not self._curr_s.is_solved():
-            print("\033[2K\n" * 8, "\033[8A", sep='', end='')
+        print("\033[2K\n" * 8, "\033[8A", sep='', end='')
 
+        if not self._curr_s.is_solved():
             actions = self._curr_s.filter_possible_moves()
             neigh_states = self._curr_s.get_neighbours()
 
